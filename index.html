@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEXORA WORLD</title>
+<style>
+:root{--glass:rgba(13,20,38,.78);--line:rgba(255,255,255,.16);--cyan:#65e7ff;--gold:#ffd36b}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101827;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:none}
+#game{position:fixed;inset:0}canvas{display:block}
+.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 8px 30px #0005}
+#hud{position:fixed;inset:0;pointer-events:none;padding:12px;display:none}
+#stats{position:absolute;top:12px;left:12px;width:min(260px,58vw);padding:10px 12px}
+.name{font-weight:800;letter-spacing:.08em;font-size:13px;color:var(--cyan)}
+.small{font-size:11px;color:#c6d1e8}
+.bar{height:9px;border-radius:20px;background:#ffffff20;overflow:hidden;margin-top:5px}
+.fill{height:100%;width:100%;border-radius:20px;transition:width .2s}
+#hpFill{background:linear-gradient(90deg,#ff5474,#ff9c9c)}#xpFill{background:linear-gradient(90deg,#65e7ff,#8d8bff)}
+#currency{position:absolute;right:12px;top:12px;padding:10px 13px;text-align:right;font-size:13px;line-height:1.7}
+#modeLabel{position:absolute;top:105px;left:12px;padding:7px 11px;font-size:12px}
+#enemyHud{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:min(260px,55vw);padding:9px 12px;text-align:center;display:none}
+#enemyFill{background:linear-gradient(90deg,#ff6b6b,#ffb05c)}
+#message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:10px 16px;text-align:center;font-weight:700;opacity:0;transition:opacity .2s;max-width:85vw}
+#controls{position:fixed;inset:0;display:none;pointer-events:none}
+#stickArea{position:absolute;left:18px;bottom:22px;width:132px;height:132px;border-radius:50%;background:#0a122866;border:1px solid #ffffff35;pointer-events:auto;touch-action:none}
+#stick{position:absolute;left:41px;top:41px;width:50px;height:50px;border-radius:50%;background:#b9efff99;border:2px solid #fff9;box-shadow:0 4px 15px #0006}
+#actions{position:absolute;right:18px;bottom:25px;display:flex;gap:12px;align-items:end;pointer-events:auto}
+.action{width:66px;height:66px;border-radius:50%;border:1px solid #ffffff70;background:#172746d9;color:#fff;font-weight:800;font-size:12px;box-shadow:0 5px 15px #0005;touch-action:none}
+.action.primary{width:78px;height:78px;background:linear-gradient(145deg,#ff8b5e,#d94362);border:2px solid #ffffffaa}
+#topButtons{position:absolute;right:12px;top:88px;display:flex;gap:7px;pointer-events:auto}
+.mini{border:1px solid var(--line);background:#111d34df;color:#fff;border-radius:10px;padding:8px 10px;font-size:11px}
+#desktopHint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#dce8ff;background:#101a2b99;padding:7px 12px;border-radius:20px;white-space:nowrap}
+#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#081321cc,#18264acc)}
+#startCard{width:min(480px,100%);padding:24px;text-align:center}
+.logo{font-size:clamp(32px,9vw,54px);font-weight:1000;letter-spacing:.08em;background:linear-gradient(90deg,#fff,#65e7ff,#b69aff);background-clip:text;color:transparent;text-shadow:0 8px 30px #65e7ff22}
+#start p{color:#cbd7eb;font-size:13px;line-height:1.6}
+.modeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.modeChoice{padding:12px 5px;border:1px solid var(--line);border-radius:13px;background:#ffffff0b;color:#fff;font-size:12px}
+.modeChoice.selected{border-color:var(--cyan);background:#65e7ff22;box-shadow:0 0 0 1px #65e7ff55 inset}
+#startBtn{width:100%;padding:14px;border:0;border-radius:13px;background:linear-gradient(90deg,#35c9e9,#647cff);color:#071321;font-weight:900;font-size:15px}
+#help{font-size:11px;color:#aab9d2;margin-top:12px}
+#levelUp{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0008;padding:20px}
+#levelCard{padding:24px;text-align:center;width:min(320px,100%)}
+#toast{position:fixed;top:25%;left:50%;transform:translateX(-50%);background:#101c32e8;border:1px solid #ffffff35;padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s;font-size:13px;z-index:5}
+@media(min-width:800px){#stickArea{width:120px;height:120px;left:28px;bottom:24px}#stick{left:36px;top:36px}#actions{right:28px}#desktopHint{display:block}}
+</style>
+</head>
+<body>
+<div id="game"></div>
+<div id="start">
+ <div id="startCard" class="panel">
+  <div class="logo">NEXORA</div><div style="font-size:12px;letter-spacing:.28em;color:#8cecff;font-weight:800">WORLD • 3D ADVENTURE</div>
+  <p>Jelajahi dunia, naikkan level, hadapi tantangan, dan kumpulkan hadiah. Pilih mode permainanmu.</p>
+  <div class="modeGrid">
+   <button class="modeChoice selected" data-mode="safe">🛡️<br><b>AMAN</b><br><span class="small">Eksplorasi</span></button>
+   <button class="modeChoice" data-mode="pvp">⚔️<br><b>PvP</b><br><span class="small">Lawan bot</span></button>
+   <button class="modeChoice" data-mode="attack">🔥<br><b>SERANG</b><br><span class="small">Naik level</span></button>
+  </div>
+  <button id="startBtn">MULAI PETUALANGAN</button>
+  <div id="help">Kontrol: WASD / tombol panah • Serang: Space • Mobile: joystick + tombol SERANG</div>
+ </div>
+</div>
+<div id="hud">
+ <div id="stats" class="panel">
+  <div class="name">NEXORA EXPLORER</div>
+  <div style="display:flex;justify-content:space-between;margin-top:5px"><b id="levelText">Lv. 1</b><span class="small" id="hpText">100 / 100 HP</span></div>
+  <div class="bar"><div class="fill" id="hpFill"></div></div>
+  <div class="small" style="margin-top:7px">XP <span id="xpText">0 / 100</span></div>
+  <div class="bar"><div class="fill" id="xpFill" style="width:0%"></div></div>
+ </div>
+ <div id="currency" class="panel">🪙 <b id="coinText">0</b><br>💎 <b id="dmText">0</b></div>
+ <div id="modeLabel" class="panel">MODE: AMAN</div>
+ <div id="enemyHud" class="panel"><b id="enemyName">SLIME</b><div class="bar"><div class="fill" id="enemyFill"></div></div><div class="small" id="enemyHp">100 HP</div></div>
+ <div id="message" class="panel">Berhasil!</div>
+</div>
+<div id="controls">
+ <div id="stickArea"><div id="stick"></div></div>
+ <div id="actions">
+  <button class="action" id="dashBtn">DASH</button>
+  <button class="action primary" id="attackBtn">SERANG</button>
+ </div>
+ <div id="topButtons"><button class="mini" id="menuBtn">☰ MENU</button></div>
+ <div id="desktopHint">WASD untuk bergerak • SPACE untuk menyerang • E untuk dash</div>
+</div>
+<div id="toast"></div>
+<div id="levelUp"><div id="levelCard" class="panel"><div style="font-size:36px">✨</div><h2>LEVEL UP!</h2><p id="levelUpText">Kamu naik level.</p><button class="mini" id="continueBtn">LANJUTKAN</button></div></div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+
+const $=id=>document.getElementById(id);
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x9bd8ee); scene.fog=new THREE.Fog(0x9bd8ee,28,85);
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,150);
+const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.7)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; $('game').appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xdaf5ff,0x65744e,2));
+const sun=new THREE.DirectionalLight(0xfff2d5,2.2); sun.position.set(-15,25,12); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); scene.add(sun);
+const mat=(color,roughness=.85)=>new THREE.MeshStandardMaterial({color,roughness});
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,120),mat(0x69a96f)); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
+const grid=new THREE.GridHelper(120,60,0x477e63,0x5b966a); grid.position.y=.015; grid.material.transparent=true; grid.material.opacity=.17; scene.add(grid);
+const path=new THREE.Mesh(new THREE.PlaneGeometry(7,100),mat(0xc8b58c)); path.rotation.x=-Math.PI/2; path.position.set(0,.025,-10); scene.add(path);
+const player=new THREE.Group(); scene.add(player);
+function makeAvatar(group,shirt=0x397fe5,skin=0xffc89d){
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.38,.65,4,8),mat(shirt)); body.position.y=1.05; body.castShadow=true; group.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.31,16,12),mat(skin)); head.position.y=1.78; head.castShadow=true; group.add(head);
+ const hair=new THREE.Mesh(new THREE.SphereGeometry(.32,12,8,0,Math.PI*2,0,Math.PI*.55),mat(0x26324a)); hair.position.y=1.91; group.add(hair);
+ const eyeMat=new THREE.MeshBasicMaterial({color:0x172033});
+ for(const x of [-.11,.11]){let e=new THREE.Mesh(new THREE.SphereGeometry(.035,8,8),eyeMat);e.position.set(x,1.79,.285);group.add(e)}
+ for(const x of [-.19,.19]){let leg=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.42,3,6),mat(0x263b62));leg.position.set(x,.32,0);group.add(leg)}
+ const sword=new THREE.Group(); const blade=new THREE.Mesh(new THREE.BoxGeometry(.09,.85,.13),mat(0xc9efff,.3));blade.position.y=.52;sword.add(blade);const hilt=new THREE.Mesh(new THREE.BoxGeometry(.32,.09,.17),mat(0xffd36b));hilt.position.y=.12;sword.add(hilt);sword.position.set(.48,1.05,.12);sword.rotation.z=-.25;group.add(sword);group.userData.sword=sword;
+}
+makeAvatar(player); player.position.set(0,0,8);
+const trees=[];
+for(let i=0;i<48;i++){let x=(Math.random()-.5)*95,z=(Math.random()-.5)*95;if(Math.abs(x)<7)continue;let t=new THREE.Group();let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.25,1.3,7),mat(0x79513a));trunk.position.y=.65;trunk.castShadow=true;t.add(trunk);let crown=new THREE.Mesh(new THREE.ConeGeometry(.95,2.5,8),mat(i%3?0x287d56:0x3c9561));crown.position.y=2.35;crown.castShadow=true;t.add(crown);t.position.set(x,0,z);scene.add(t);trees.push(t)}
+// Small town buildings
+for(let i=0;i<8;i++){let x=(i%2?1:-1)*(10+Math.floor(i/2)*7),z=-10-Math.floor(i/2)*13;let b=new THREE.Group();let base=new THREE.Mesh(new THREE.BoxGeometry(5,3.2,4),mat([0xf0d6aa,0xd9e5f2,0xf0b7ad,0xc8c2ed][i%4]));base.position.y=1.6;base.castShadow=true;base.receiveShadow=true;b.add(base);let roof=new THREE.Mesh(new THREE.ConeGeometry(3.8,1.8,4),mat(0x596a91));roof.position.y=4;roof.rotation.y=Math.PI/4;b.add(roof);b.position.set(x,0,z);scene.add(b)}
+// Landmark
+const ring=new THREE.Mesh(new THREE.TorusGeometry(2.4,.18,10,48),mat(0x61e7ff,.3));ring.position.set(0,2,-13);scene.add(ring);
+const enemies=[]; let mode='safe',started=false,level=1,xp=0,coins=0,dms=0,hp=100,maxHp=100,activeEnemy=null,attackCooldown=0,dashCooldown=0;
+function spawnEnemy(isBoss=false){
+ const g=new THREE.Group();let color=isBoss?0x9a65db:([0x66d6a0,0x73b7f5,0xffad70][Math.floor(Math.random()*3)]);
+ const blob=new THREE.Mesh(new THREE.SphereGeometry(isBoss?.85:.55,16,12),mat(color));blob.scale.y=.85;blob.position.y=isBoss?.85:.55;blob.castShadow=true;g.add(blob);
+ const eye=new THREE.Mesh(new THREE.SphereGeometry(.075,8,8),mat(0x152238));for(let x of [-.18,.18]){let e=eye.clone();e.position.set(x,isBoss?1.03:.68,.45);g.add(e)}
+ const hornMat=mat(0xf3edcf);for(let x of [-.35,.35]){let h=new THREE.Mesh(new THREE.ConeGeometry(.12,.35,6),hornMat);h.position.set(x,isBoss?1.5:1,.0);h.rotation.z=x>0?-.35:.35;g.add(h)}
+ const e={group:g,hp:isBoss?220:65+level*17,max:isBoss?220:65+level*17,damage:isBoss?13:5+level*1.5,boss:isBoss,dead:false,hit:0};
+ const a=Math.random()*Math.PI*2,r=7+Math.random()*9;g.position.set(player.position.x+Math.cos(a)*r,0,player.position.z+Math.sin(a)*r);scene.add(g);enemies.push(e);return e;
+}
+function clearEnemies(){for(const e of enemies)scene.remove(e.group);enemies.length=0;activeEnemy=null;updateEnemyHud()}
+function setupMode(m){mode=m;clearEnemies();$('modeLabel').textContent='MODE: '+({safe:'AMAN',pvp:'PvP',attack:'SERANG'}[m]);if(m==='pvp'){spawnEnemy();spawnEnemy()}if(m==='attack'){spawnEnemy();spawnEnemy()}}
+function updateEnemyHud(){if(!activeEnemy||activeEnemy.dead){$('enemyHud').style.display='none';return}$('enemyHud').style.display='block';$('enemyName').textContent=activeEnemy.boss?'ELITE SLIME':'SLIME';$('enemyFill').style.width=Math.max(0,activeEnemy.hp/activeEnemy.max*100)+'%';$('enemyHp').textContent=Math.ceil(activeEnemy.hp)+' HP'}
+function toast(s){$('toast').textContent=s;$('toast').style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.opacity=0,1500)}
+function updateHud(){$('levelText').textContent='Lv. '+level;$('hpText').textContent=Math.ceil(hp)+' / '+maxHp+' HP';$('hpFill').style.width=hp/maxHp*100+'%';$('xpText').textContent=xp+' / '+(level*100);$('xpFill').style.width=xp/(level*100)*100+'%';$('coinText').textContent=coins;$('dmText').textContent=dms}
+function reward(e){let c=(8+level*5)*(e.boss?5:1),d=e.boss?3:Math.random()<.18?1:0;coins+=c;dms+=d;xp+=e.boss?100:35+level*7;toast('+'+c+' coin  '+(d?' +'+d+' DM':'')+'  •  +' +(e.boss?100:35+level*7)+' XP');if(xp>=level*100){xp-=level*100;level++;maxHp+=12;hp=Math.min(maxHp,hp+35);$('levelUpText').textContent='Sekarang kamu level '+level+'! HP maksimum bertambah.';$('levelUp').style.display='flex'}updateHud()}
+function doAttack(){if(!started||mode==='safe'||attackCooldown>0)return;attackCooldown=.55;player.userData.sword.rotation.x=-.9;setTimeout(()=>{player.userData.sword.rotation.x=0},170);
+ let nearest=null,dist=3.4;for(const e of enemies){if(e.dead)continue;let d=e.group.position.distanceTo(player.position);if(d<dist){dist=d;nearest=e}}
+ if(nearest){nearest.hp-=22+level*4;nearest.hit=.18;activeEnemy=nearest;updateEnemyHud();if(nearest.hp<=0){nearest.dead=true;scene.remove(nearest.group);reward(nearest);activeEnemy=null;updateEnemyHud();if(mode==='pvp')setTimeout(()=>{if(started&&mode==='pvp')spawnEnemy()},900);if(mode==='attack'){if(enemies.every(e=>e.dead)){setTimeout(()=>{if(started&&mode==='attack'){spawnEnemy(level%3===0);spawnEnemy()}},900)}}}}else toast('Dekati musuh untuk menyerang!')}
+function dash(){if(dashCooldown>0)return;dashCooldown=1.5;const f=new THREE.Vector3(Math.sin(player.rotation.y),0,Math.cos(player.rotation.y));player.position.addScaledVector(f,2.8)}
+const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'){e.preventDefault();doAttack()}if(e.key.toLowerCase()==='e')dash()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+let joy={x:0,y:0},dragging=false;const area=$('stickArea'),knob=$('stick');
+function joyMove(e){const r=area.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,len=Math.hypot(dx,dy),max=42;if(len>max){dx=dx/len*max;dy=dy/len*max}joy.x=dx/max;joy.y=dy/max;knob.style.transform=`translate(${dx}px,${dy}px)`}
+area.addEventListener('pointerdown',e=>{dragging=true;area.setPointerCapture(e.pointerId);joyMove(e)});area.addEventListener('pointermove',e=>{if(dragging)joyMove(e)});function joyEnd(){dragging=false;joy.x=joy.y=0;knob.style.transform='translate(0,0)'}area.addEventListener('pointerup',joyEnd);area.addEventListener('pointercancel',joyEnd);
+$('attackBtn').addEventListener('pointerdown',e=>{e.preventDefault();doAttack()});$('dashBtn').addEventListener('pointerdown',e=>{e.preventDefault();dash()});
+$('menuBtn').onclick=()=>{$('start').style.display='flex';$('hud').style.display='none';$('controls').style.display='none';started=false};
+$('continueBtn').onclick=()=>$('levelUp').style.display='none';
+document.querySelectorAll('.modeChoice').forEach(b=>b.onclick=()=>{document.querySelectorAll('.modeChoice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');mode=b.dataset.mode});
+$('startBtn').onclick=()=>{$('start').style.display='none';$('hud').style.display='block';$('controls').style.display='block';started=true;hp=maxHp;setupMode(mode);updateHud();toast('Gunakan joystick untuk berjalan!')};
+function move(dt){let x=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x;let z=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+joy.y;let v=new THREE.Vector3(x,0,z);if(v.length()>1)v.normalize();if(v.lengthSq()>.01){player.position.x+=v.x*6*dt;player.position.z+=v.z*6*dt;player.rotation.y=Math.atan2(v.x,v.z)}player.position.x=THREE.MathUtils.clamp(player.position.x,-48,48);player.position.z=THREE.MathUtils.clamp(player.position.z,-48,48)}
+const clock=new THREE.Clock();
+function animate(){requestAnimationFrame(animate);let dt=Math.min(clock.getDelta(),.04);if(started){move(dt);attackCooldown=Math.max(0,attackCooldown-dt);dashCooldown=Math.max(0,dashCooldown-dt);
+ for(const e of enemies){if(e.dead)continue;let d=e.group.position.distanceTo(player.position);if(mode!=='safe'&&d<12){let dir=player.position.clone().sub(e.group.position);dir.y=0;dir.normalize();e.group.position.addScaledVector(dir,dt*(e.boss?1.5:1.9));if(d<1.5&&Math.random()<dt*.55){hp=Math.max(0,hp-e.damage);updateHud();if(hp<=0){hp=maxHp;player.position.set(0,0,8);toast('Kamu kembali ke titik awal! HP dipulihkan.')}}}e.group.position.y=Math.sin(performance.now()*.003+e.group.position.x)*.08;if(e.hit>0){e.hit-=dt;e.group.scale.setScalar(1.12)}else e.group.scale.setScalar(1)}
+ if(activeEnemy&&activeEnemy.dead)activeEnemy=null;
+ }
+ const target=new THREE.Vector3(player.position.x,3.5,player.position.z+7.5);camera.position.lerp(target,.09);camera.lookAt(player.position.x,1.1,player.position.z-1.5);
+ ring.rotation.y+=dt*.4;
+ renderer.render(scene,camera)}
+animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+</script>
+</body>
+</html>
