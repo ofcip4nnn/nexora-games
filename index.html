@@ -1,158 +1,188 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NEXORA WORLD</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>NEXORA — Fantasy Realm V4</title>
 <style>
-:root{--glass:rgba(13,20,38,.78);--line:rgba(255,255,255,.16);--cyan:#65e7ff;--gold:#ffd36b}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#101827;color:#fff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;touch-action:none}
-#game{position:fixed;inset:0}canvas{display:block}
-.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:16px;box-shadow:0 8px 30px #0005}
-#hud{position:fixed;inset:0;pointer-events:none;padding:12px;display:none}
-#stats{position:absolute;top:12px;left:12px;width:min(260px,58vw);padding:10px 12px}
-.name{font-weight:800;letter-spacing:.08em;font-size:13px;color:var(--cyan)}
-.small{font-size:11px;color:#c6d1e8}
-.bar{height:9px;border-radius:20px;background:#ffffff20;overflow:hidden;margin-top:5px}
-.fill{height:100%;width:100%;border-radius:20px;transition:width .2s}
-#hpFill{background:linear-gradient(90deg,#ff5474,#ff9c9c)}#xpFill{background:linear-gradient(90deg,#65e7ff,#8d8bff)}
-#currency{position:absolute;right:12px;top:12px;padding:10px 13px;text-align:right;font-size:13px;line-height:1.7}
-#modeLabel{position:absolute;top:105px;left:12px;padding:7px 11px;font-size:12px}
-#enemyHud{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:min(260px,55vw);padding:9px 12px;text-align:center;display:none}
-#enemyFill{background:linear-gradient(90deg,#ff6b6b,#ffb05c)}
-#message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:10px 16px;text-align:center;font-weight:700;opacity:0;transition:opacity .2s;max-width:85vw}
-#controls{position:fixed;inset:0;display:none;pointer-events:none}
-#stickArea{position:absolute;left:18px;bottom:22px;width:132px;height:132px;border-radius:50%;background:#0a122866;border:1px solid #ffffff35;pointer-events:auto;touch-action:none}
-#stick{position:absolute;left:41px;top:41px;width:50px;height:50px;border-radius:50%;background:#b9efff99;border:2px solid #fff9;box-shadow:0 4px 15px #0006}
-#actions{position:absolute;right:18px;bottom:25px;display:flex;gap:12px;align-items:end;pointer-events:auto}
-.action{width:66px;height:66px;border-radius:50%;border:1px solid #ffffff70;background:#172746d9;color:#fff;font-weight:800;font-size:12px;box-shadow:0 5px 15px #0005;touch-action:none}
-.action.primary{width:78px;height:78px;background:linear-gradient(145deg,#ff8b5e,#d94362);border:2px solid #ffffffaa}
-#topButtons{position:absolute;right:12px;top:88px;display:flex;gap:7px;pointer-events:auto}
-.mini{border:1px solid var(--line);background:#111d34df;color:#fff;border-radius:10px;padding:8px 10px;font-size:11px}
-#desktopHint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:11px;color:#dce8ff;background:#101a2b99;padding:7px 12px;border-radius:20px;white-space:nowrap}
-#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(135deg,#081321cc,#18264acc)}
-#startCard{width:min(480px,100%);padding:24px;text-align:center}
-.logo{font-size:clamp(32px,9vw,54px);font-weight:1000;letter-spacing:.08em;background:linear-gradient(90deg,#fff,#65e7ff,#b69aff);background-clip:text;color:transparent;text-shadow:0 8px 30px #65e7ff22}
-#start p{color:#cbd7eb;font-size:13px;line-height:1.6}
-.modeGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
-.modeChoice{padding:12px 5px;border:1px solid var(--line);border-radius:13px;background:#ffffff0b;color:#fff;font-size:12px}
-.modeChoice.selected{border-color:var(--cyan);background:#65e7ff22;box-shadow:0 0 0 1px #65e7ff55 inset}
-#startBtn{width:100%;padding:14px;border:0;border-radius:13px;background:linear-gradient(90deg,#35c9e9,#647cff);color:#071321;font-weight:900;font-size:15px}
-#help{font-size:11px;color:#aab9d2;margin-top:12px}
-#levelUp{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0008;padding:20px}
-#levelCard{padding:24px;text-align:center;width:min(320px,100%)}
-#toast{position:fixed;top:25%;left:50%;transform:translateX(-50%);background:#101c32e8;border:1px solid #ffffff35;padding:10px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s;font-size:13px;z-index:5}
-@media(min-width:800px){#stickArea{width:120px;height:120px;left:28px;bottom:24px}#stick{left:36px;top:36px}#actions{right:28px}#desktopHint{display:block}}
+:root{--glass:rgba(12,19,35,.78);--line:#ffffff27;--blue:#8be5ff;--gold:#ffd889}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#91cce5;color:#fff;font-family:Inter,system-ui,Arial;touch-action:none}button{font:inherit;color:inherit;cursor:pointer}#world{position:fixed;inset:0}canvas{display:block}
+#start{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(120deg,#071326d9,#102d49b5);z-index:20}
+.card,.glass{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);box-shadow:0 15px 50px #06101e55;border-radius:20px}
+#startCard{width:min(470px,100%);padding:24px;text-align:center}.logo{font-size:clamp(36px,10vw,58px);font-weight:1000;letter-spacing:.12em;background:linear-gradient(100deg,#fff,#a2eeff,#e4d5ff);color:transparent;background-clip:text}.sub{font-size:11px;letter-spacing:.3em;color:#a9eaff}.intro{font-size:13px;line-height:1.65;color:#c8d9ee;margin:15px 0 18px}
+.gender{display:flex;gap:10px}.gender button,.primary,.secondary,.tab,.choice{border:1px solid var(--line);border-radius:13px;background:#ffffff0d;padding:11px}.gender button{flex:1}.gender button.active,.choice.active{border-color:var(--blue);background:#65dfff24}.primary{width:100%;border:0;background:linear-gradient(100deg,#55d8f1,#788cff);color:#071626;font-weight:900;padding:14px;margin-top:14px}
+#hud{display:none;position:fixed;inset:0;pointer-events:none;padding:12px;z-index:5}.glass{pointer-events:auto}
+#profileMini{position:absolute;top:12px;left:12px;padding:9px 12px;min-width:180px;display:flex;gap:9px;align-items:center}.avatarIcon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(140deg,#7fe4ff,#747aff);font-size:20px}.bar{height:7px;background:#ffffff24;border-radius:20px;overflow:hidden;margin-top:5px}.fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#5fe6a2,#b0f4d1)}#xpFill{background:linear-gradient(90deg,#65dfff,#a79aff)}
+#wallet{position:absolute;right:12px;top:12px;padding:9px 12px;text-align:right;font-size:12px;line-height:1.8}
+#topActions{position:absolute;right:12px;top:92px;display:flex;gap:6px}.iconBtn{background:#101c32db;border:1px solid var(--line);border-radius:12px;padding:9px 11px;font-size:12px}
+#quest{position:absolute;left:12px;top:91px;padding:9px 12px;font-size:11px;max-width:190px}
+#hint{position:absolute;left:50%;bottom:160px;transform:translateX(-50%);padding:9px 14px;font-size:12px;white-space:nowrap;opacity:0;transition:.2s}
+#hint.show{opacity:1}
+#controls{display:none;position:fixed;inset:0;pointer-events:none;z-index:6}
+#stickBase{position:absolute;left:20px;bottom:22px;width:132px;height:132px;border-radius:50%;background:#0b17365c;border:1px solid #ffffff55;pointer-events:auto;touch-action:none}
+#stickKnob{position:absolute;width:54px;height:54px;left:38px;top:38px;border-radius:50%;background:#a8eaffaa;border:2px solid #ffffffaa;box-shadow:0 4px 18px #0005}
+#buttons{position:absolute;right:17px;bottom:24px;display:flex;gap:9px;align-items:end;pointer-events:auto}.controlBtn{border:1px solid #ffffff66;background:#152641d9;border-radius:50%;width:59px;height:59px;font-size:11px;font-weight:800;box-shadow:0 5px 15px #0005;touch-action:none}.controlBtn.big{width:72px;height:72px;background:linear-gradient(140deg,#e5b96a,#b56c49)}.controlBtn.interact{background:linear-gradient(140deg,#65cce8,#5377c9)}
+#camHint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:10px;color:#fff;text-shadow:0 2px 5px #000;white-space:nowrap}
+#modal{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:16px;background:#02091899}
+#modalBox{width:min(470px,100%);max-height:85vh;overflow:auto;padding:18px}
+.modalHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.close{border:0;background:#ffffff18;border-radius:10px;padding:7px 10px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.tab{font-size:11px;padding:8px 10px}.tab.active{background:#70dfff29;border-color:#8be5ff}
+.item{display:flex;align-items:center;gap:10px;padding:11px;margin:8px 0;border:1px solid var(--line);border-radius:14px;background:#ffffff08}.itemIcon{font-size:25px;width:38px;text-align:center}.itemInfo{flex:1;min-width:0}.itemInfo b{font-size:13px}.itemInfo small{display:block;color:#b7c8dc;font-size:11px;margin-top:3px}.buy{border:0;background:#4dc8e7;color:#061523;font-weight:900;padding:8px 10px;border-radius:10px;font-size:11px}.buy:disabled{opacity:.45}
+.profileGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.statBox{padding:11px;border-radius:12px;background:#ffffff0c;border:1px solid var(--line)}.statBox small{display:block;color:#b8c9dd;font-size:10px}.statBox b{font-size:17px}
+.small{font-size:11px;color:#b8c9df}.choiceGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.partyRow{display:flex;gap:8px;overflow:auto;padding:4px 0 10px}.partyCard{min-width:105px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#ffffff0a;text-align:center}.partyCard.active{border-color:#8be5ff;background:#65dfff22}.partyCard .face{font-size:26px}.profileName{width:100%;padding:10px;border-radius:10px;background:#ffffff12;border:1px solid var(--line);color:white;margin:7px 0}.actionWide{width:100%;padding:10px;border:1px solid var(--line);background:#ffffff12;border-radius:11px;margin-top:7px}
+#toast{position:fixed;top:24%;left:50%;transform:translateX(-50%);padding:10px 15px;background:#101b31ed;border:1px solid var(--line);border-radius:13px;z-index:50;opacity:0;transition:.2s;pointer-events:none;font-size:12px;white-space:nowrap}
+@media(min-width:800px){#stickBase{left:30px}#buttons{right:30px}#camHint{bottom:10px}}
 </style>
 </head>
 <body>
-<div id="game"></div>
-<div id="start">
- <div id="startCard" class="panel">
-  <div class="logo">NEXORA</div><div style="font-size:12px;letter-spacing:.28em;color:#8cecff;font-weight:800">WORLD • 3D ADVENTURE</div>
-  <p>Jelajahi dunia, naikkan level, hadapi tantangan, dan kumpulkan hadiah. Pilih mode permainanmu.</p>
-  <div class="modeGrid">
-   <button class="modeChoice selected" data-mode="safe">🛡️<br><b>AMAN</b><br><span class="small">Eksplorasi</span></button>
-   <button class="modeChoice" data-mode="pvp">⚔️<br><b>PvP</b><br><span class="small">Lawan bot</span></button>
-   <button class="modeChoice" data-mode="attack">🔥<br><b>SERANG</b><br><span class="small">Naik level</span></button>
-  </div>
-  <button id="startBtn">MULAI PETUALANGAN</button>
-  <div id="help">Kontrol: WASD / tombol panah • Serang: Space • Mobile: joystick + tombol SERANG</div>
- </div>
-</div>
+<div id="world"></div>
+<div id="start"><div id="startCard" class="card">
+ <div class="logo">NEXORA</div><div class="sub">FANTASY REALM</div>
+ <p class="intro">Dunia fantasi anime 3D. Jelajahi lembah, temui penduduk, kumpulkan harta, bentuk party petualang, dan kuasai kekuatan elemen.</p>
+ <div style="text-align:left;font-size:12px;margin-bottom:8px">Pilih karakter</div>
+ <div class="gender"><button class="active" data-gender="boy">♂ Cowok</button><button data-gender="girl">♀ Cewek</button></div>
+ <button class="primary" id="play">MULAI PETUALANGAN</button><button class="secondary" id="continueBtn" style="width:100%;margin-top:8px">↻ LANJUTKAN PROGRES</button>
+ <div style="font-size:10px;color:#9fb4cf;margin-top:12px">Kamera bisa diputar dengan menggeser layar / mouse.</div>
+</div></div>
 <div id="hud">
- <div id="stats" class="panel">
-  <div class="name">NEXORA EXPLORER</div>
-  <div style="display:flex;justify-content:space-between;margin-top:5px"><b id="levelText">Lv. 1</b><span class="small" id="hpText">100 / 100 HP</span></div>
-  <div class="bar"><div class="fill" id="hpFill"></div></div>
-  <div class="small" style="margin-top:7px">XP <span id="xpText">0 / 100</span></div>
-  <div class="bar"><div class="fill" id="xpFill" style="width:0%"></div></div>
+ <div id="profileMini" class="glass"><div class="avatarIcon" id="miniFace">🧑🏻‍🎤</div><div style="flex:1"><b id="playerName" style="font-size:12px">Wanderer</b><div style="font-size:10px;color:#b9cbe0" id="levelLine">Lv. 1 • Adventurer</div><div class="bar"><div class="fill" id="hpFill"></div></div><div style="font-size:9px;color:#d7e5f5" id="hpText">100/100 HP</div><div class="bar"><div class="fill" id="xpFill" style="width:0%"></div></div></div></div>
+ <div id="wallet" class="glass">🪙 <b id="coins">120</b><br>💎 <b id="gems">5</b></div>
+ <div id="quest" class="glass">📜 <b>Petualangan dimulai</b><br>Temui Elder Rowan untuk menerima misi.</div>
+ <div id="enemyHud" class="glass" style="display:none;position:absolute;top:150px;left:50%;transform:translateX(-50%);width:min(245px,58vw);padding:9px 12px;text-align:center">
+  <b id="enemyName" style="font-size:12px">Forest Slime</b><div class="bar"><div class="fill" id="enemyFill" style="background:linear-gradient(90deg,#ff647d,#ffb36b);width:100%"></div></div><div id="enemyHp" style="font-size:10px;color:#c9d7e8">100 HP</div>
  </div>
- <div id="currency" class="panel">🪙 <b id="coinText">0</b><br>💎 <b id="dmText">0</b></div>
- <div id="modeLabel" class="panel">MODE: AMAN</div>
- <div id="enemyHud" class="panel"><b id="enemyName">SLIME</b><div class="bar"><div class="fill" id="enemyFill"></div></div><div class="small" id="enemyHp">100 HP</div></div>
- <div id="message" class="panel">Berhasil!</div>
+ <div id="topActions"><button class="iconBtn" id="profileBtn">👤 Profil</button><button class="iconBtn" id="shopBtn">🛒 Toko</button><button class="iconBtn" id="partyBtn">✦ Party</button><button class="iconBtn" id="saveBtn">💾</button><button class="iconBtn" id="menuBtn">☰</button></div>
+ <div id="hint" class="glass">Tekan INTERAKSI untuk berbicara</div>
 </div>
 <div id="controls">
- <div id="stickArea"><div id="stick"></div></div>
- <div id="actions">
-  <button class="action" id="dashBtn">DASH</button>
-  <button class="action primary" id="attackBtn">SERANG</button>
- </div>
- <div id="topButtons"><button class="mini" id="menuBtn">☰ MENU</button></div>
- <div id="desktopHint">WASD untuk bergerak • SPACE untuk menyerang • E untuk dash</div>
+ <div id="stickBase"><div id="stickKnob"></div></div>
+ <div id="buttons"><button class="controlBtn" id="jump">LOMPAT</button><button class="controlBtn interact" id="interact">INTERAKSI</button><button class="controlBtn" id="skill">SKILL<br>✦</button><button class="controlBtn big" id="attack">SERANG</button></div>
+ <div id="camHint">Geser layar untuk putar kamera • WASD / joystick • F interaksi</div>
 </div>
+<div id="modal"><div id="modalBox" class="glass"><div class="modalHead"><div><b id="modalTitle">Profil</b><div id="modalSub" style="font-size:10px;color:#b8c9df">NEXORA</div></div><button class="close" id="closeModal">✕</button></div><div id="modalContent"></div></div></div>
 <div id="toast"></div>
-<div id="levelUp"><div id="levelCard" class="panel"><div style="font-size:36px">✨</div><h2>LEVEL UP!</h2><p id="levelUpText">Kamu naik level.</p><button class="mini" id="continueBtn">LANJUTKAN</button></div></div>
 <script type="module">
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-
 const $=id=>document.getElementById(id);
-const scene=new THREE.Scene(); scene.background=new THREE.Color(0x9bd8ee); scene.fog=new THREE.Fog(0x9bd8ee,28,85);
-const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,150);
-const renderer=new THREE.WebGLRenderer({antialias:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.7)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; $('game').appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xdaf5ff,0x65744e,2));
-const sun=new THREE.DirectionalLight(0xfff2d5,2.2); sun.position.set(-15,25,12); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); scene.add(sun);
-const mat=(color,roughness=.85)=>new THREE.MeshStandardMaterial({color,roughness});
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(120,120),mat(0x69a96f)); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
-const grid=new THREE.GridHelper(120,60,0x477e63,0x5b966a); grid.position.y=.015; grid.material.transparent=true; grid.material.opacity=.17; scene.add(grid);
-const path=new THREE.Mesh(new THREE.PlaneGeometry(7,100),mat(0xc8b58c)); path.rotation.x=-Math.PI/2; path.position.set(0,.025,-10); scene.add(path);
-const player=new THREE.Group(); scene.add(player);
-function makeAvatar(group,shirt=0x397fe5,skin=0xffc89d){
- const body=new THREE.Mesh(new THREE.CapsuleGeometry(.38,.65,4,8),mat(shirt)); body.position.y=1.05; body.castShadow=true; group.add(body);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.31,16,12),mat(skin)); head.position.y=1.78; head.castShadow=true; group.add(head);
- const hair=new THREE.Mesh(new THREE.SphereGeometry(.32,12,8,0,Math.PI*2,0,Math.PI*.55),mat(0x26324a)); hair.position.y=1.91; group.add(hair);
- const eyeMat=new THREE.MeshBasicMaterial({color:0x172033});
- for(const x of [-.11,.11]){let e=new THREE.Mesh(new THREE.SphereGeometry(.035,8,8),eyeMat);e.position.set(x,1.79,.285);group.add(e)}
- for(const x of [-.19,.19]){let leg=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.42,3,6),mat(0x263b62));leg.position.set(x,.32,0);group.add(leg)}
- const sword=new THREE.Group(); const blade=new THREE.Mesh(new THREE.BoxGeometry(.09,.85,.13),mat(0xc9efff,.3));blade.position.y=.52;sword.add(blade);const hilt=new THREE.Mesh(new THREE.BoxGeometry(.32,.09,.17),mat(0xffd36b));hilt.position.y=.12;sword.add(hilt);sword.position.set(.48,1.05,.12);sword.rotation.z=-.25;group.add(sword);group.userData.sword=sword;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x9bdcf3);scene.fog=new THREE.Fog(0x9bdcf3,55,155);
+const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.1,350);
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;$('world').appendChild(renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xe4f7ff,0x687b55,2.1));const sun=new THREE.DirectionalLight(0xfff0d6,2.7);sun.position.set(-35,55,25);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-45;sun.shadow.camera.right=45;sun.shadow.camera.top=45;sun.shadow.camera.bottom=-45;scene.add(sun);
+const mat=(c,r=.8)=>new THREE.MeshStandardMaterial({color:c,roughness:r});
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(260,260),mat(0x70ae76));ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;scene.add(ground);
+const meadow=new THREE.Mesh(new THREE.PlaneGeometry(90,90),mat(0x83bd7a));meadow.rotation.x=-Math.PI/2;meadow.position.set(0,.012,-22);scene.add(meadow);
+const path=new THREE.Mesh(new THREE.PlaneGeometry(10,170),mat(0xcbb991));path.rotation.x=-Math.PI/2;path.position.set(0,.025,-28);scene.add(path);
+const path2=new THREE.Mesh(new THREE.PlaneGeometry(100,7),mat(0xcbb991));path2.rotation.x=-Math.PI/2;path2.position.set(0,.027,-18);scene.add(path2);
+// distant hills
+for(let i=0;i<18;i++){let a=i/18*Math.PI*2;let hill=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),mat(i%2?0x6f9e80:0x7eaa83));hill.scale.set(15+Math.random()*10,8+Math.random()*9,13);hill.position.set(Math.cos(a)*83,3,Math.sin(a)*83-20);scene.add(hill)}
+// Clouds, each cloud is a cluster of soft spheres
+const clouds=[];for(let i=0;i<17;i++){let g=new THREE.Group();for(let j=0;j<5;j++){let puff=new THREE.Mesh(new THREE.SphereGeometry(1,12,9),new THREE.MeshLambertMaterial({color:0xffffff,transparent:true,opacity:.88}));puff.scale.set(2.2+Math.random()*2,1+Math.random()*.7,1.5+Math.random());puff.position.set((j-2)*1.6,Math.random()*.6,Math.sin(j)*.7);g.add(puff)}g.position.set((Math.random()-.5)*150,19+Math.random()*13,(Math.random()-.5)*145);g.userData.speed=.35+Math.random()*.5;scene.add(g);clouds.push(g)}
+// trees
+const obstacles=[];function tree(x,z,s=1){let g=new THREE.Group();let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.22*s,.32*s,1.8*s,8),mat(0x79513a));trunk.position.y=.9*s;trunk.castShadow=true;g.add(trunk);for(let k=0;k<3;k++){let crown=new THREE.Mesh(new THREE.ConeGeometry((1.35-k*.17)*s,2.5*s,9),mat([0x287c55,0x348c5e,0x438f61][k]));crown.position.y=(2.25+k*.65)*s;crown.castShadow=true;g.add(crown)}g.position.set(x,0,z);g.scale.setScalar(1);scene.add(g);obstacles.push({x,z,r:.65*s})}
+for(let i=0;i<125;i++){let x=(Math.random()-.5)*180,z=(Math.random()-.5)*180;if(Math.abs(x)<13&&z<12&&z>-48)continue;tree(x,z,.75+Math.random()*.65)}
+// flowers
+for(let i=0;i<100;i++){let f=new THREE.Mesh(new THREE.SphereGeometry(.09,6,6),mat([0xffe7a1,0xffb9d1,0xffffff][i%3]));f.position.set((Math.random()-.5)*65,.16,(Math.random()-.5)*85-18);scene.add(f)}
+// small lake, rocky outcrops and extra forest clusters to make the landscape feel wider
+const lake=new THREE.Mesh(new THREE.CircleGeometry(13,48),new THREE.MeshStandardMaterial({color:0x58b9d2,roughness:.18,metalness:.12,transparent:true,opacity:.88}));lake.rotation.x=-Math.PI/2;lake.position.set(36,.045,-43);scene.add(lake);
+for(let i=0;i<34;i++){let x=26+(Math.random()-.5)*25,z=-43+(Math.random()-.5)*25;if(Math.hypot((x-36),z+43)<14)continue;let rock=new THREE.Mesh(new THREE.DodecahedronGeometry(.7+Math.random()*1.4,0),mat(0x788b89));rock.position.set(x,.45,z);rock.scale.y=.65;rock.castShadow=true;scene.add(rock)}
+for(let i=0;i<65;i++){let x=(Math.random()-.5)*210,z=(Math.random()-.5)*210;if(Math.abs(x)<18&&z<10&&z>-55)continue;tree(x,z,.65+Math.random()*.7)}
+// houses
+function house(x,z,color){let g=new THREE.Group();let base=new THREE.Mesh(new THREE.BoxGeometry(7,4.3,6),mat(color));base.position.y=2.15;base.castShadow=true;base.receiveShadow=true;g.add(base);let roof=new THREE.Mesh(new THREE.ConeGeometry(5.4,2.7,4),mat(0x58617e));roof.position.y=5.5;roof.rotation.y=Math.PI/4;roof.castShadow=true;g.add(roof);let door=new THREE.Mesh(new THREE.BoxGeometry(1.2,2.3,.12),mat(0x69442e));door.position.set(0,1.15,3.06);g.add(door);for(let xw of [-2.1,2.1]){let win=new THREE.Mesh(new THREE.BoxGeometry(1.15,1.1,.1),new THREE.MeshStandardMaterial({color:0x9ee9f5,emissive:0x24516a}));win.position.set(xw,2.65,3.08);g.add(win)}g.position.set(x,0,z);scene.add(g)}
+house(-15,-13,0xf1d6b0);house(15,-16,0xd6e3f1);house(-17,-31,0xe9c0c4);house(17,-34,0xe0d4a5);house(0,-48,0xc6d7ee);
+// player avatar: slim stylized fantasy anime silhouette
+let gender='boy',player=new THREE.Group(),weapon=null,skinIndex=0;scene.add(player);
+const skins=[0x3b80d8,0x8a61c9,0x2c9b8d,0xc77b55],skinNames=['Azure Traveler','Violet Mystic','Jade Wanderer','Sunset Knight'];
+const skinPrices=[0,180,240,320];
+function buildAvatar(){while(player.children.length)player.remove(player.children[0]);const skin=skins[skinIndex];const cloth=mat(skin),dark=mat(0x27344d),skinMat=mat(gender==='boy'?0xf0c6a4:0xf4c9b5),gold=mat(0xe9c77b,.45);
+function mesh(geo,m,x,y,z,rx=0,ry=0,rz=0){let o=new THREE.Mesh(geo,m);o.position.set(x,y,z);o.rotation.set(rx,ry,rz);o.castShadow=true;player.add(o);return o}
+mesh(new THREE.CapsuleGeometry(.22,.67,5,10),cloth,0,1.02,0);
+mesh(new THREE.SphereGeometry(.245,18,14),skinMat,0,1.72,0);
+if(gender==='boy'){mesh(new THREE.SphereGeometry(.26,16,10,0,Math.PI*2,0,Math.PI*.55),dark,0,1.84,0);mesh(new THREE.BoxGeometry(.48,.09,.24),dark,0,1.78,-.04)}
+else{mesh(new THREE.SphereGeometry(.28,16,12,0,Math.PI*2,0,Math.PI*.62),mat(0x34253c),0,1.82,0);for(let x of [-.22,.22])mesh(new THREE.CapsuleGeometry(.075,.48,4,7),mat(0x34253c),x,1.48,-.015)}
+const eye=mat(0x243049);for(let x of [-.085,.085])mesh(new THREE.SphereGeometry(.025,8,8),eye,x,1.72,.226);
+mesh(new THREE.ConeGeometry(.29,.5,8),cloth,0,.55,0,Math.PI);
+for(let x of [-.105,.105]){mesh(new THREE.CapsuleGeometry(.075,.44,4,7),dark,x,.26,0);mesh(new THREE.BoxGeometry(.18,.12,.3),mat(0x443d48),x,.08,.06)}
+for(let x of [-.28,.28])mesh(new THREE.CapsuleGeometry(.075,.48,4,7),cloth,x,1.05,0,0,0,x*.7);
+mesh(new THREE.BoxGeometry(.65,.075,.12),gold,0,1.32,0);
+weapon=new THREE.Group();let blade=new THREE.Mesh(new THREE.BoxGeometry(.065,.85,.09),mat(0xd9f4ff,.25));blade.position.y=.48;weapon.add(blade);let guard=new THREE.Mesh(new THREE.BoxGeometry(.3,.07,.13),gold);guard.position.y=.08;weapon.add(guard);weapon.position.set(.38,.9,.15);weapon.rotation.z=-.22;player.add(weapon);
 }
-makeAvatar(player); player.position.set(0,0,8);
-const trees=[];
-for(let i=0;i<48;i++){let x=(Math.random()-.5)*95,z=(Math.random()-.5)*95;if(Math.abs(x)<7)continue;let t=new THREE.Group();let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.25,1.3,7),mat(0x79513a));trunk.position.y=.65;trunk.castShadow=true;t.add(trunk);let crown=new THREE.Mesh(new THREE.ConeGeometry(.95,2.5,8),mat(i%3?0x287d56:0x3c9561));crown.position.y=2.35;crown.castShadow=true;t.add(crown);t.position.set(x,0,z);scene.add(t);trees.push(t)}
-// Small town buildings
-for(let i=0;i<8;i++){let x=(i%2?1:-1)*(10+Math.floor(i/2)*7),z=-10-Math.floor(i/2)*13;let b=new THREE.Group();let base=new THREE.Mesh(new THREE.BoxGeometry(5,3.2,4),mat([0xf0d6aa,0xd9e5f2,0xf0b7ad,0xc8c2ed][i%4]));base.position.y=1.6;base.castShadow=true;base.receiveShadow=true;b.add(base);let roof=new THREE.Mesh(new THREE.ConeGeometry(3.8,1.8,4),mat(0x596a91));roof.position.y=4;roof.rotation.y=Math.PI/4;b.add(roof);b.position.set(x,0,z);scene.add(b)}
-// Landmark
-const ring=new THREE.Mesh(new THREE.TorusGeometry(2.4,.18,10,48),mat(0x61e7ff,.3));ring.position.set(0,2,-13);scene.add(ring);
-const enemies=[]; let mode='safe',started=false,level=1,xp=0,coins=0,dms=0,hp=100,maxHp=100,activeEnemy=null,attackCooldown=0,dashCooldown=0;
-function spawnEnemy(isBoss=false){
- const g=new THREE.Group();let color=isBoss?0x9a65db:([0x66d6a0,0x73b7f5,0xffad70][Math.floor(Math.random()*3)]);
- const blob=new THREE.Mesh(new THREE.SphereGeometry(isBoss?.85:.55,16,12),mat(color));blob.scale.y=.85;blob.position.y=isBoss?.85:.55;blob.castShadow=true;g.add(blob);
- const eye=new THREE.Mesh(new THREE.SphereGeometry(.075,8,8),mat(0x152238));for(let x of [-.18,.18]){let e=eye.clone();e.position.set(x,isBoss?1.03:.68,.45);g.add(e)}
- const hornMat=mat(0xf3edcf);for(let x of [-.35,.35]){let h=new THREE.Mesh(new THREE.ConeGeometry(.12,.35,6),hornMat);h.position.set(x,isBoss?1.5:1,.0);h.rotation.z=x>0?-.35:.35;g.add(h)}
- const e={group:g,hp:isBoss?220:65+level*17,max:isBoss?220:65+level*17,damage:isBoss?13:5+level*1.5,boss:isBoss,dead:false,hit:0};
- const a=Math.random()*Math.PI*2,r=7+Math.random()*9;g.position.set(player.position.x+Math.cos(a)*r,0,player.position.z+Math.sin(a)*r);scene.add(g);enemies.push(e);return e;
+buildAvatar();player.position.set(0,0,4);
+// NPCs
+const npcs=[];function npc(name,role,x,z,shirt=0xc68d54){let g=new THREE.Group();const body=new THREE.Mesh(new THREE.CapsuleGeometry(.28,.55,4,8),mat(shirt));body.position.y=.9;g.add(body);const head=new THREE.Mesh(new THREE.SphereGeometry(.24,12,10),mat(0xeac2a0));head.position.y=1.55;g.add(head);const hat=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.12,12),mat(role==='Merchant'?0xb58a45:0x574a65));hat.position.y=1.83;g.add(hat);g.position.set(x,0,z);scene.add(g);npcs.push({name,role,group:g,dialogue:role==='Merchant'?'Selamat datang! Aku punya perlengkapan untuk petualang.':'Halo, petualang! Katanya ada peti harta di sekitar hutan.'})}
+npc('Mira','Merchant',-5,-9,0x8e6acb);npc('Elder Rowan','Villager',7,-24,0x638b75);npc('Luna','Villager',-8,-37,0xd28b9c);npc('Tomas','Villager',23,-7,0x6495b9);
+// treasure chests
+const chests=[];function chest(x,z){let g=new THREE.Group();let box=new THREE.Mesh(new THREE.BoxGeometry(.9,.58,.65),mat(0x98602f));box.position.y=.42;box.castShadow=true;g.add(box);let lid=new THREE.Mesh(new THREE.BoxGeometry(.96,.22,.7),mat(0xb67a3c));lid.position.y=.82;g.add(lid);let lock=new THREE.Mesh(new THREE.BoxGeometry(.14,.2,.08),mat(0xf7d56d,.4));lock.position.set(0,.62,.36);g.add(lock);g.position.set(x,0,z);scene.add(g);chests.push({group:g,opened:false})}
+for(let i=0;i<14;i++){let x=(Math.random()-.5)*95,z=(Math.random()-.5)*105-12;if(Math.abs(x)<9&&z>-43) x+=Math.sign(x||1)*15;chest(x,z)}
+// Forest creatures and dungeon guardians
+const monsters=[];
+function spawnMonster(x,z,boss=false){
+ const g=new THREE.Group(),bodyMat=mat(boss?0x8d67d9:0x63d6a2);
+ const body=new THREE.Mesh(new THREE.SphereGeometry(boss?.9:.58,16,12),bodyMat);body.scale.y=.82;body.position.y=boss?.9:.58;body.castShadow=true;g.add(body);
+ const eyeMat=mat(0x172238);for(const ex of [-.2,.2]){const eye=new THREE.Mesh(new THREE.SphereGeometry(.075,8,8),eyeMat);eye.position.set(ex,boss?1.12:.73,.48);g.add(eye)}
+ const hornMat=mat(0xf7e5b4);for(const ex of [-.4,.4]){const horn=new THREE.Mesh(new THREE.ConeGeometry(.13,.38,7),hornMat);horn.position.set(ex,boss?1.55:1.05,0);horn.rotation.z=ex>0?-.35:.35;g.add(horn)}
+ g.position.set(x,0,z);scene.add(g);
+ const m={group:g,hp:boss?260:70,max:boss?260:70,damage:boss?12:5,boss,dead:false,attackTimer:0,hitFlash:0};monsters.push(m);return m;
 }
-function clearEnemies(){for(const e of enemies)scene.remove(e.group);enemies.length=0;activeEnemy=null;updateEnemyHud()}
-function setupMode(m){mode=m;clearEnemies();$('modeLabel').textContent='MODE: '+({safe:'AMAN',pvp:'PvP',attack:'SERANG'}[m]);if(m==='pvp'){spawnEnemy();spawnEnemy()}if(m==='attack'){spawnEnemy();spawnEnemy()}}
-function updateEnemyHud(){if(!activeEnemy||activeEnemy.dead){$('enemyHud').style.display='none';return}$('enemyHud').style.display='block';$('enemyName').textContent=activeEnemy.boss?'ELITE SLIME':'SLIME';$('enemyFill').style.width=Math.max(0,activeEnemy.hp/activeEnemy.max*100)+'%';$('enemyHp').textContent=Math.ceil(activeEnemy.hp)+' HP'}
-function toast(s){$('toast').textContent=s;$('toast').style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.opacity=0,1500)}
-function updateHud(){$('levelText').textContent='Lv. '+level;$('hpText').textContent=Math.ceil(hp)+' / '+maxHp+' HP';$('hpFill').style.width=hp/maxHp*100+'%';$('xpText').textContent=xp+' / '+(level*100);$('xpFill').style.width=xp/(level*100)*100+'%';$('coinText').textContent=coins;$('dmText').textContent=dms}
-function reward(e){let c=(8+level*5)*(e.boss?5:1),d=e.boss?3:Math.random()<.18?1:0;coins+=c;dms+=d;xp+=e.boss?100:35+level*7;toast('+'+c+' coin  '+(d?' +'+d+' DM':'')+'  •  +' +(e.boss?100:35+level*7)+' XP');if(xp>=level*100){xp-=level*100;level++;maxHp+=12;hp=Math.min(maxHp,hp+35);$('levelUpText').textContent='Sekarang kamu level '+level+'! HP maksimum bertambah.';$('levelUp').style.display='flex'}updateHud()}
-function doAttack(){if(!started||mode==='safe'||attackCooldown>0)return;attackCooldown=.55;player.userData.sword.rotation.x=-.9;setTimeout(()=>{player.userData.sword.rotation.x=0},170);
- let nearest=null,dist=3.4;for(const e of enemies){if(e.dead)continue;let d=e.group.position.distanceTo(player.position);if(d<dist){dist=d;nearest=e}}
- if(nearest){nearest.hp-=22+level*4;nearest.hit=.18;activeEnemy=nearest;updateEnemyHud();if(nearest.hp<=0){nearest.dead=true;scene.remove(nearest.group);reward(nearest);activeEnemy=null;updateEnemyHud();if(mode==='pvp')setTimeout(()=>{if(started&&mode==='pvp')spawnEnemy()},900);if(mode==='attack'){if(enemies.every(e=>e.dead)){setTimeout(()=>{if(started&&mode==='attack'){spawnEnemy(level%3===0);spawnEnemy()}},900)}}}}else toast('Dekati musuh untuk menyerang!')}
-function dash(){if(dashCooldown>0)return;dashCooldown=1.5;const f=new THREE.Vector3(Math.sin(player.rotation.y),0,Math.cos(player.rotation.y));player.position.addScaledVector(f,2.8)}
-const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.code==='Space'){e.preventDefault();doAttack()}if(e.key.toLowerCase()==='e')dash()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
-let joy={x:0,y:0},dragging=false;const area=$('stickArea'),knob=$('stick');
-function joyMove(e){const r=area.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy,len=Math.hypot(dx,dy),max=42;if(len>max){dx=dx/len*max;dy=dy/len*max}joy.x=dx/max;joy.y=dy/max;knob.style.transform=`translate(${dx}px,${dy}px)`}
-area.addEventListener('pointerdown',e=>{dragging=true;area.setPointerCapture(e.pointerId);joyMove(e)});area.addEventListener('pointermove',e=>{if(dragging)joyMove(e)});function joyEnd(){dragging=false;joy.x=joy.y=0;knob.style.transform='translate(0,0)'}area.addEventListener('pointerup',joyEnd);area.addEventListener('pointercancel',joyEnd);
-$('attackBtn').addEventListener('pointerdown',e=>{e.preventDefault();doAttack()});$('dashBtn').addEventListener('pointerdown',e=>{e.preventDefault();dash()});
-$('menuBtn').onclick=()=>{$('start').style.display='flex';$('hud').style.display='none';$('controls').style.display='none';started=false};
-$('continueBtn').onclick=()=>$('levelUp').style.display='none';
-document.querySelectorAll('.modeChoice').forEach(b=>b.onclick=()=>{document.querySelectorAll('.modeChoice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');mode=b.dataset.mode});
-$('startBtn').onclick=()=>{$('start').style.display='none';$('hud').style.display='block';$('controls').style.display='block';started=true;hp=maxHp;setupMode(mode);updateHud();toast('Gunakan joystick untuk berjalan!')};
-function move(dt){let x=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x;let z=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+joy.y;let v=new THREE.Vector3(x,0,z);if(v.length()>1)v.normalize();if(v.lengthSq()>.01){player.position.x+=v.x*6*dt;player.position.z+=v.z*6*dt;player.rotation.y=Math.atan2(v.x,v.z)}player.position.x=THREE.MathUtils.clamp(player.position.x,-48,48);player.position.z=THREE.MathUtils.clamp(player.position.z,-48,48)}
-const clock=new THREE.Clock();
-function animate(){requestAnimationFrame(animate);let dt=Math.min(clock.getDelta(),.04);if(started){move(dt);attackCooldown=Math.max(0,attackCooldown-dt);dashCooldown=Math.max(0,dashCooldown-dt);
- for(const e of enemies){if(e.dead)continue;let d=e.group.position.distanceTo(player.position);if(mode!=='safe'&&d<12){let dir=player.position.clone().sub(e.group.position);dir.y=0;dir.normalize();e.group.position.addScaledVector(dir,dt*(e.boss?1.5:1.9));if(d<1.5&&Math.random()<dt*.55){hp=Math.max(0,hp-e.damage);updateHud();if(hp<=0){hp=maxHp;player.position.set(0,0,8);toast('Kamu kembali ke titik awal! HP dipulihkan.')}}}e.group.position.y=Math.sin(performance.now()*.003+e.group.position.x)*.08;if(e.hit>0){e.hit-=dt;e.group.scale.setScalar(1.12)}else e.group.scale.setScalar(1)}
- if(activeEnemy&&activeEnemy.dead)activeEnemy=null;
+for(let i=0;i<9;i++){let a=Math.random()*Math.PI*2,r=18+Math.random()*27;spawnMonster(Math.cos(a)*r,Math.sin(a)*r-25)}
+let dungeonActive=false,dungeonBossDefeated=false,questStage=0,monsterKills=0,skillCooldown=0,attackCooldown=0,selectedMonster=null;
+// game data
+let coins=120,gems=5,level=1,xp=0,hp=100,maxHp=100,power=1,comfort=1,weaponLevel=1,owned=[0],questDone=0,nearest=null,started=false;
+let playerNameValue='Wanderer',element='Anemo',activeParty=0,party=[{name:'Aether',element:'Anemo',face:'🧑🏻‍🎤',level:1},{name:'Lumine',element:'Geo',face:'👩🏻‍🎤',level:1},{name:'Kael',element:'Pyro',face:'🧑🏽‍🦰',level:1},{name:'Mira',element:'Hydro',face:'👩🏻‍🦳',level:1}];
+const elementColors={Anemo:0x75e7c1,Geo:0xf2c56e,Pyro:0xff805f,Hydro:0x64c9ff,Cryo:0xb7f3ff,Electro:0xc18bff};
+const inventory=['Wooden Sword','Traveler Blade','Moonlight Edge'];
+function updateHud(){$('coins').textContent=coins;$('gems').textContent=gems;$('levelLine').textContent='Lv. '+level+' • Adventurer';$('hpText').textContent=Math.ceil(hp)+'/'+maxHp+' HP';$('hpFill').style.width=hp/maxHp*100+'%';$('xpFill').style.width=xp/(level*100)*100+'%'}
+function toast(s){$('toast').textContent=s;$('toast').style.opacity=1;clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').style.opacity=0,1700)}
+function showHint(s){$('hint').textContent=s;$('hint').classList.add('show')}function hideHint(){$('hint').classList.remove('show')}
+function profile(){openModal('Profil Petualang','Identitas • Statistik • Elemen',`<div style="display:flex;gap:12px;align-items:center;margin-bottom:12px"><div class="avatarIcon" style="width:58px;height:58px;font-size:28px">${gender==='boy'?'🧑🏻‍🎤':'👩🏻‍🎤'}</div><div><b>${playerNameValue}</b><div class="small">${skinNames[skinIndex]} • ${element}</div><div class="small">NEXORA Adventurer</div></div></div><label class="small">Nama petualang</label><input class="profileName" id="renameInput" maxlength="18" value="${playerNameValue.replace(/"/g,'&quot;')}"><button class="actionWide" onclick="renamePlayer()">Simpan nama</button><div class="profileGrid" style="margin-top:10px"><div class="statBox"><small>LEVEL</small><b>${level}</b></div><div class="statBox"><small>POWER</small><b>${power*10+weaponLevel*5}</b></div><div class="statBox"><small>HP MAX</small><b>${maxHp}</b></div><div class="statBox"><small>PETI DITEMUKAN</small><b>${questDone}</b></div><div class="statBox"><small>COINS</small><b>${coins}</b></div><div class="statBox"><small>DIAMONDS</small><b>${gems}</b></div></div><p class="small" style="margin:12px 0 6px">Pilih elemen utama</p><div class="choiceGrid">${Object.keys(elementColors).map(e=>`<button class="choice ${element===e?'active':''}" onclick="setElement('${e}')">${({Anemo:'🌪️',Geo:'🪨',Pyro:'🔥',Hydro:'💧',Cryo:'❄️',Electro:'⚡'})[e]} ${e}</button>`).join('')}</div><p class="small" style="margin-top:12px">Gender: ${gender==='boy'?'Cowok':'Cewek'} • Senjata: ${inventory[weaponLevel-1]||inventory[0]}</p>`)}
+window.renamePlayer=()=>{let v=document.getElementById('renameInput')?.value.trim();if(v){playerNameValue=v;$('playerName').textContent=v;profile();toast('Nama petualang diperbarui')}};
+window.setElement=e=>{element=e;profile();toast('Elemen '+e+' dipilih!')};
+function partyMenu(){let cards=party.map((p,i)=>`<button class="partyCard ${activeParty===i?'active':''}" onclick="switchParty(${i})"><div class="face">${p.face}</div><b style="font-size:12px">${p.name}</b><div class="small">${p.element} • Lv.${p.level}</div></button>`).join('');openModal('Party Petualang','Pilih karakter aktif',`<div class="partyRow">${cards}</div><p class="small">Party dapat dikembangkan menjadi empat karakter. Pada prototype ini, pergantian karakter mengubah avatar dan elemen aktif.</p><div class="statBox"><small>KARAKTER AKTIF</small><b>${party[activeParty].name} — ${party[activeParty].element}</b></div>`)}
+window.switchParty=i=>{activeParty=i;gender=i===1||i===3?'girl':'boy';element=party[i].element;buildAvatar();$('miniFace').textContent=party[i].face;partyMenu();toast('Karakter aktif: '+party[i].name)};
+function saveGame(){const data={coins,gems,level,xp,hp,maxHp,power,comfort,weaponLevel,owned,questDone,gender,skinIndex,playerNameValue,element,activeParty,pos:[player.position.x,player.position.y,player.position.z],opened:chests.map(c=>c.opened),questStage,monsterKills};try{localStorage.setItem('nexora_save_v4',JSON.stringify(data));toast('Progres berhasil disimpan!')}catch(e){toast('Penyimpanan tidak tersedia di browser ini.')}}
+function loadGame(){try{const d=JSON.parse(localStorage.getItem('nexora_save_v4')||'null');if(!d)return false;for(const k of ['coins','gems','level','xp','hp','maxHp','power','comfort','weaponLevel','questDone','gender','skinIndex','playerNameValue','element','activeParty','questStage','monsterKills'])if(d[k]!==undefined){switch(k){case'coins':coins=d[k];break;case'gems':gems=d[k];break;case'level':level=d[k];break;case'xp':xp=d[k];break;case'hp':hp=d[k];break;case'maxHp':maxHp=d[k];break;case'power':power=d[k];break;case'comfort':comfort=d[k];break;case'weaponLevel':weaponLevel=d[k];break;case'questDone':questDone=d[k];break;case'gender':gender=d[k];break;case'skinIndex':skinIndex=d[k];break;case'playerNameValue':playerNameValue=d[k];break;case'element':element=d[k];break;case'activeParty':activeParty=d[k];break;case'questStage':questStage=d[k];break;case'monsterKills':monsterKills=d[k];break;}}owned=d.owned||[0];if(d.pos)player.position.set(...d.pos);if(d.opened)d.opened.forEach((v,i)=>{if(chests[i]){chests[i].opened=v;if(v)chests[i].group.rotation.x=-1.15}});buildAvatar();$('miniFace').textContent=gender==='boy'?'🧑🏻‍🎤':'👩🏻‍🎤';$('playerName').textContent=playerNameValue;updateHud();return true}catch(e){return false}}
+
+let shopTab='skin';function shop(){let tabs=`<div class="tabs">${[['skin','👕 Skin'],['weapon','⚔️ Senjata'],['power','✨ Kekuatan'],['comfort','⚙️ Smooth']].map(([id,t])=>`<button class="tab ${shopTab===id?'active':''}" data-tab="${id}">${t}</button>`).join('')}</div>`;let items=[];if(shopTab==='skin')items=skinNames.map((n,i)=>({icon:['🧥','🔮','🌿','🔥'][i],name:n,desc:'Tampilan karakter baru',price:skinPrices[i],owned:owned.includes(i),action:`buySkin(${i})`}));if(shopTab==='weapon')items=[{icon:'🗡️',name:'Traveler Blade',desc:'+5 kekuatan serangan',price:150,owned:weaponLevel>=2,action:'buyWeapon(2)'},{icon:'⚔️',name:'Moonlight Edge',desc:'+10 kekuatan serangan',price:350,owned:weaponLevel>=3,action:'buyWeapon(3)'}];if(shopTab==='power')items=[{icon:'💪',name:'Latihan kekuatan',desc:'Damage serangan meningkat',price:100*power,owned:false,action:'upgradePower()'},{icon:'❤️',name:'Vitalitas',desc:'+25 HP maksimum dan pulihkan HP',price:130,owned:false,action:'upgradeHealth()'}];if(shopTab==='comfort')items=[{icon:'⚙️',name:'Peningkatan kelancaran',desc:'Mengaktifkan kualitas visual lebih ringan dan kontrol responsif',price:90*comfort,owned:false,action:'upgradeComfort()'},{icon:'🎥',name:'Kamera halus',desc:'Kamera mengikuti karakter lebih lembut',price:120,owned:false,action:'cameraUpgrade()'}];let list=items.map(it=>`<div class="item"><div class="itemIcon">${it.icon}</div><div class="itemInfo"><b>${it.name}</b><small>${it.desc}</small><small>${it.owned?'Sudah dimiliki':'🪙 '+it.price+' coin'}</small></div><button class="buy" ${it.owned?'disabled':''} onclick="${it.action}">${it.owned?'DIMILIKI':'BELI'}</button></div>`).join('');openModal('Toko Mira','Skin • Senjata • Upgrade',tabs+list);document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{shopTab=b.dataset.tab;shop()})}
+function openModal(title,sub,content){$('modalTitle').textContent=title;$('modalSub').textContent=sub;$('modalContent').innerHTML=content;$('modal').style.display='flex'}
+function closeModal(){$('modal').style.display='none'}$('closeModal').onclick=closeModal;
+window.buySkin=i=>{if(owned.includes(i)){skinIndex=i;buildAvatar();shop();toast('Skin dipakai!');return}if(coins<skinPrices[i])return toast('Coin belum cukup!');coins-=skinPrices[i];owned.push(i);skinIndex=i;buildAvatar();updateHud();shop();toast('Skin berhasil dibeli!')};
+window.buyWeapon=n=>{let price=n===2?150:350;if(weaponLevel>=n)return;if(coins<price)return toast('Coin belum cukup!');coins-=price;weaponLevel=n;updateHud();shop();toast('Senjata berhasil ditingkatkan!')};
+window.upgradePower=()=>{let price=100*power;if(coins<price)return toast('Coin belum cukup!');coins-=price;power++;updateHud();shop();toast('Kekuatan meningkat!')};
+window.upgradeHealth=()=>{if(coins<130)return toast('Coin belum cukup!');coins-=130;maxHp+=25;hp=maxHp;updateHud();shop();toast('HP maksimum meningkat!')};
+window.upgradeComfort=()=>{let price=90*comfort;if(coins<price)return toast('Coin belum cukup!');coins-=price;comfort++;renderer.setPixelRatio(Math.min(devicePixelRatio,comfort>=2?1.35:1.6));updateHud();shop();toast('Pengaturan performa diperbarui!')};
+window.cameraUpgrade=()=>{if(coins<120)return toast('Coin belum cukup!');coins-=120;cameraSmooth=Math.min(.16,cameraSmooth+.025);updateHud();shop();toast('Kamera lebih responsif!')};
+let cameraSmooth=.09;
+function nearby(){let best=null,d=3.8;for(const n of npcs){let v=n.group.position.distanceTo(player.position);if(v<d){d=v;best={type:'npc',obj:n}}}for(const c of chests){if(c.opened)continue;let v=c.group.position.distanceTo(player.position);if(v<d){d=v;best={type:'chest',obj:c}}}let pd=portal.position.distanceTo(player.position);if(pd<4&&pd<d){d=pd;best={type:'portal',obj:portal}}return best}
+function interact(){if(!nearest)return;if(nearest.type==='npc'){let n=nearest.obj;if(n.role==='Merchant'){shop()}else if(n.name==='Elder Rowan'&&questStage===0){questStage=1;$('quest').innerHTML='📜 <b>Misi: Bersihkan hutan</b><br>Kalahkan 3 slime di sekitar desa.';openModal('Misi baru','Elder Rowan',`<p style="font-size:13px;line-height:1.6">Hutan di dekat desa mulai dipenuhi slime. Tolong kalahkan <b>3 slime</b> agar jalan kembali aman. Aku akan memberimu hadiah.</p><div class="item"><div class="itemIcon">🎁</div><div class="itemInfo"><b>Hadiah misi</b><small>180 coin • 2 DM • 100 XP</small></div></div>`)}else{openModal(n.name,'Penduduk desa',`<p style="font-size:13px;line-height:1.6">${n.dialogue}</p><p class="small">Di hutan ada slime, peti harta, dan sebuah portal dungeon di ujung jalan.</p><button class="primary" onclick="document.getElementById('modal').style.display='none'">Baik, terima kasih!</button>`);questDone++}}else if(nearest.type==='chest'){let c=nearest.obj;c.opened=true;c.group.rotation.x=-1.15;let reward=45+level*12;coins+=reward;gems+=Math.random()<.3?1:0;questDone++;updateHud();toast('Peti terbuka! +'+reward+' coin');$('quest').innerHTML='📜 <b>Harta ditemukan</b><br>Terus jelajahi dunia untuk menemukan peti lainnya.'}else if(nearest.type==='portal'){dungeonActive=true;dungeonBossDefeated=false;for(const m of monsters){if(!m.dead)scene.remove(m.group);m.dead=true}spawnMonster(player.position.x+3,player.position.z-7);spawnMonster(player.position.x-3,player.position.z-10);spawnMonster(player.position.x,player.position.z-15,true);toast('Dungeon dimasuki! Kalahkan penjaga dungeon.')}nearest=null;hideHint()}
+$('profileBtn').onclick=profile;$('partyBtn').onclick=partyMenu;$('saveBtn').onclick=saveGame;$('shopBtn').onclick=shop;$('menuBtn').onclick=()=>{$('start').style.display='flex';$('hud').style.display='none';$('controls').style.display='none';started=false};$('interact').onclick=interact;
+// movement + camera orbit: drag anywhere not on UI
+const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=true;if(e.key===' '){e.preventDefault();attack()}if(e.key.toLowerCase()==='f')interact()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+let joy={x:0,y:0},stickDrag=false;const base=$('stickBase'),knob=$('stickKnob');
+function moveStick(e){let r=base.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),l=Math.hypot(dx,dy),m=42;if(l>m){dx*=m/l;dy*=m/l}joy.x=dx/m;joy.y=dy/m;knob.style.transform=`translate(${dx}px,${dy}px)`}
+base.addEventListener('pointerdown',e=>{stickDrag=true;base.setPointerCapture(e.pointerId);moveStick(e)});base.addEventListener('pointermove',e=>{if(stickDrag)moveStick(e)});function stickEnd(){stickDrag=false;joy.x=joy.y=0;knob.style.transform='translate(0,0)'}base.addEventListener('pointerup',stickEnd);base.addEventListener('pointercancel',stickEnd);
+let yaw=0,pitch=.25,camDrag=false,lastX=0,lastY=0;renderer.domElement.addEventListener('pointerdown',e=>{if(e.clientX<155&&e.clientY>innerHeight-170)return;camDrag=true;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(e.pointerId)});renderer.domElement.addEventListener('pointermove',e=>{if(!camDrag)return;let dx=e.clientX-lastX,dy=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;yaw-=dx*.006;pitch=THREE.MathUtils.clamp(pitch+dy*.003,-.15,.8)});renderer.domElement.addEventListener('pointerup',()=>camDrag=false);renderer.domElement.addEventListener('pointercancel',()=>camDrag=false);
+let attackWait=0,jumpY=0,jumpV=0;
+function refreshEnemyHud(m){selectedMonster=m;if(!m||m.dead){$('enemyHud').style.display='none';return}$('enemyHud').style.display='block';$('enemyName').textContent=m.boss?'DUNGEON GUARDIAN':'FOREST SLIME';$('enemyFill').style.width=Math.max(0,m.hp/m.max*100)+'%';$('enemyHp').textContent=Math.ceil(m.hp)+' / '+m.max+' HP'}
+function gainXP(amount){xp+=amount;while(xp>=level*100){xp-=level*100;level++;maxHp+=12;hp=maxHp;toast('LEVEL UP! Kamu mencapai level '+level)}updateHud()}
+function defeatMonster(m){m.dead=true;scene.remove(m.group);monsterKills++;let reward=m.boss?350:35+level*7;coins+=reward;gems+=m.boss?5:(Math.random()<.15?1:0);gainXP(m.boss?180:35);toast('Musuh dikalahkan! +'+reward+' coin');refreshEnemyHud(null);if(questStage===1&&monsterKills>=3){questStage=2;coins+=180;gems+=2;gainXP(100);$('quest').innerHTML='✅ <b>Misi selesai!</b><br>Hutan sudah lebih aman. Temui Elder Rowan.';toast('Misi selesai! Hadiah diterima.')}if(m.boss){dungeonBossDefeated=true;dungeonActive=false;$('quest').innerHTML='🏆 <b>Dungeon selesai!</b><br>Penjaga dungeon berhasil dikalahkan.';toast('DUNGEON CLEAR! Hadiah besar didapatkan.')}updateHud()}
+function hitMonster(damage,radius=3.8){let target=null,best=radius;for(const m of monsters){if(m.dead)continue;let d=m.group.position.distanceTo(player.position);if(d<best){best=d;target=m}}if(!target){toast('Dekati monster terlebih dahulu!');return}target.hp-=damage;target.hitFlash=.18;refreshEnemyHud(target);if(target.hp<=0)defeatMonster(target);else toast('Serangan mengenai monster!')}
+function attack(){if(!started||attackWait>0)return;attackWait=.48;weapon.rotation.x=-1.2;setTimeout(()=>{if(weapon)weapon.rotation.x=0},170);hitMonster(24+power*9+weaponLevel*7,3.8)}
+function elementalSkill(){if(!started||skillCooldown>0)return;skillCooldown=4;const burst=new THREE.Mesh(new THREE.SphereGeometry(2.1,16,12),new THREE.MeshBasicMaterial({color:elementColors[element]||0x70dfff,transparent:true,opacity:.4,wireframe:true}));burst.position.copy(player.position);burst.position.y=1;scene.add(burst);setTimeout(()=>scene.remove(burst),350);let hit=0;for(const m of monsters){if(!m.dead&&m.group.position.distanceTo(player.position)<6){m.hp-=48+power*13;hit++;if(m.hp<=0)defeatMonster(m);else refreshEnemyHud(m)}}toast(element+' Burst! '+(hit?'Mengenai '+hit+' musuh!':'Skill dilepaskan!'));}
+$('attack').onclick=attack;$('skill').onclick=elementalSkill;$('jump').onclick=()=>{if(jumpY<=.01)jumpV=5.5};
+$('continueBtn').onclick=()=>{if(loadGame())toast('Progres terakhir dimuat!');else toast('Belum ada progres tersimpan.')};
+$('play').onclick=()=>{$('start').style.display='none';$('hud').style.display='block';$('controls').style.display='block';started=true;updateHud();toast('Selamat datang! Dekati Mira untuk membuka toko.')};
+document.querySelectorAll('[data-gender]').forEach(b=>b.onclick=()=>{gender=b.dataset.gender;document.querySelectorAll('[data-gender]').forEach(x=>x.classList.toggle('active',x===b));$('miniFace').textContent=gender==='boy'?'🧑🏻‍🎤':'👩🏻‍🎤'});
+const clock=new THREE.Clock();let walkT=0,autosaveTimer=0;
+function animate(){requestAnimationFrame(animate);let dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;autosaveTimer+=dt;if(started&&autosaveTimer>15){autosaveTimer=0;try{localStorage.setItem('nexora_save_v4',JSON.stringify({coins,gems,level,xp,hp,maxHp,power,comfort,weaponLevel,owned,questDone,gender,skinIndex,playerNameValue,element,activeParty,pos:[player.position.x,player.position.y,player.position.z],opened:chests.map(c=>c.opened),questStage,monsterKills}))}catch(e){}}
+ clouds.forEach(c=>{c.position.x+=c.userData.speed*dt;if(c.position.x>100)c.position.x=-100});
+ if(started){let ix=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0)+joy.x,iz=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0)+joy.y;let v=new THREE.Vector3(ix,0,iz);if(v.length()>1)v.normalize();if(v.lengthSq()>.01){let ang=Math.atan2(v.x,v.z);player.rotation.y=ang;let speed=5.5*(keys.shift?1.4:1);let nx=player.position.x+v.x*speed*dt,nz=player.position.z+v.z*speed*dt;let blocked=obstacles.some(o=>Math.hypot(nx-o.x,nz-o.z)<o.r);if(!blocked){player.position.x=nx;player.position.z=nz}walkT+=dt*10;player.position.y=Math.abs(Math.sin(walkT))*.045;player.rotation.z=Math.sin(walkT)*.035}else{player.position.y=0;player.rotation.z=THREE.MathUtils.damp(player.rotation.z,0,8,dt)}
+ if(jumpY>0||jumpV>0){jumpV-=13*dt;jumpY=Math.max(0,jumpY+jumpV*dt);if(jumpY===0)jumpV=0;player.position.y=jumpY}
+ attackWait=Math.max(0,attackWait-dt);
+ nearest=nearby();if(nearest){showHint(nearest.type==='npc'?(nearest.obj.role==='Merchant'?'INTERAKSI • Mira — Penjual':'INTERAKSI • '+nearest.obj.name):nearest.type==='portal'?'INTERAKSI • Masuk Dungeon':'INTERAKSI • Peti harta karun')}else hideHint();
+ for(const m of monsters){if(m.dead)continue;let d=m.group.position.distanceTo(player.position);if(d<14){let dir=player.position.clone().sub(m.group.position);dir.y=0;dir.normalize();m.group.position.addScaledVector(dir,dt*(m.boss?1.45:1.75));if(d<1.55){m.attackTimer-=dt;if(m.attackTimer<=0){m.attackTimer=1.25;hp=Math.max(0,hp-m.damage);updateHud();if(hp<=0){hp=maxHp;player.position.set(0,0,4);toast('Kamu terjatuh dan kembali ke desa.')}}}}m.group.position.y=.06+Math.sin(t*3+m.group.position.x)*.09}
+ if(selectedMonster&&selectedMonster.dead)refreshEnemyHud(null);
  }
- const target=new THREE.Vector3(player.position.x,3.5,player.position.z+7.5);camera.position.lerp(target,.09);camera.lookAt(player.position.x,1.1,player.position.z-1.5);
- ring.rotation.y+=dt*.4;
+ let dist=9.2, horiz=Math.cos(pitch)*dist,vert=3.2+Math.sin(pitch)*dist;let desired=new THREE.Vector3(player.position.x+Math.sin(yaw)*horiz,player.position.y+vert,player.position.z+Math.cos(yaw)*horiz);camera.position.lerp(desired,cameraSmooth);camera.lookAt(player.position.x,player.position.y+1.15,player.position.z);
  renderer.render(scene,camera)}
 animate();
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
 </script>
-</body>
-</html>
+</body></html>
